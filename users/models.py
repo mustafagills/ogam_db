@@ -1,53 +1,57 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, ilkad, soyad, yetki_kod, kullanici_tipi_no, kullanici_kod,personel_no, active = True, password = None):
+    def create_user(self, email, ilkad, soyad, yetki_kod, kullanici_tipi_no, kullanici_kod,id, active = True, password = None):
         if not email or not ilkad or not soyad or not kullanici_tipi_no or not kullanici_kod or not yetki_kod:
             raise ValueError("E-mail, ilkad, soyad, yetki kodu, kullanıcı tipi no, kullanıcı kod, personel no alanları boş kalamaz.")
         user_obj = self.model(
             email = self.normalize_email(email)
         )
         user_obj.set_password(password)
-        user_obj.personel_no = personel_no
+        user_obj.id = id
         user_obj.ilkad, user_obj.soyad = ilkad, soyad
         user_obj.active = active
         user_obj.yetki_kod = yetki_kod
+        user_obj.baslama_tarih = timezone.now
         user_obj.kullanici_tipi_no = kullanici_tipi_no
         user_obj.kullanici_kod = kullanici_kod
-        user_obj.personel_no = personel_no
+        user_obj.id = id
         user_obj.save(using=self._db)
 
         return user_obj
 
 
-    def create_staffuser(self, email, ilkad, soyad, yetki_kod, kullanici_tipi_no, kullanici_kod,personel_no, active = True, password = None):
+    def create_staffuser(self, email, ilkad, soyad, yetki_kod, kullanici_tipi_no, kullanici_kod,id, active = True, password = None):
         user = self.create_user(
             email,
             password=password,
             ilkad = ilkad,
             soyad = soyad,
             yetki_kod = yetki_kod,
+            baslama_tarih = timezone.now,
             active = active,
             kullanici_tipi_no = kullanici_tipi_no,
             kullanici_kod = kullanici_kod,
-            personel_no = personel_no,
+            id = id,
         )
         user.staff = True
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, ilkad, soyad, yetki_kod,kullanici_tipi_no, kullanici_kod,personel_no, active = True, password = None):
+    def create_superuser(self, email, ilkad, soyad, yetki_kod,kullanici_tipi_no, kullanici_kod,id, active = True, password = None):
         user = self.create_user(
             email,
             password=password,
             ilkad = ilkad,
             soyad = soyad,
             yetki_kod = yetki_kod,
+            baslama_tarih = timezone.now,
             active = active,
             kullanici_tipi_no = kullanici_tipi_no,
             kullanici_kod = kullanici_kod,
-            personel_no = personel_no,
+            id = id,
         )
         user.staff = True
         user.admin = True
@@ -55,13 +59,13 @@ class UserManager(BaseUserManager):
         return user
 
 class User4Personels(AbstractBaseUser):
-    personel_no = models.IntegerField(unique = True, blank = False)
+    id = models.IntegerField(unique = True, blank = False, primary_key=True, verbose_name='Personel No')
     email = models.EmailField(unique=True, max_length = 255, default = True)
     ilkad = models.CharField(max_length = 20, blank = False)
     soyad = models.CharField(max_length = 20, blank = False)
     unvan = models.IntegerField(null = True, blank = True)
     yetki_kod = models.IntegerField(blank=False)
-    baslama_tarih = models.DateTimeField(null = True, blank = True)
+    baslama_tarih = models.DateTimeField(default=timezone.now)
     bitis_tarih = models.DateTimeField(null = True, blank = True)
     kullanici_tipi_no = models.IntegerField(blank = False)
     kullanici_kod = models.CharField(max_length = 11, blank = False)
@@ -72,6 +76,7 @@ class User4Personels(AbstractBaseUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [
+        'id',
         'ilkad',
         'soyad',
         'yetki_kod',
@@ -83,11 +88,11 @@ class User4Personels(AbstractBaseUser):
 
     def get_full_name(self):
         # The user is identified by their email address
-        return self.email
+        return self.ilkad + self.soyad
 
     def get_short_name(self):
         # The user is identified by their email address
-        return self.email
+        return self.ilkad
 
     def __str__(self):
         return self.email

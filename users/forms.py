@@ -11,7 +11,7 @@ class UserAdminCreationForm(forms.ModelForm):
     class Meta:
         model = User4Personels
         fields = (
-            'personel_no',
+            'id',
             'ilkad',
             'soyad',
             'active',
@@ -53,7 +53,7 @@ class UserAdminChangeForm(forms.ModelForm):
     class Meta:
         model = User4Personels
         fields = (
-            'personel_no',
+            'id',
             'ilkad',
             'soyad',
             'active',
@@ -85,7 +85,7 @@ class RegisterForm(forms.ModelForm):
     class Meta:
         model = User4Personels
         fields = (
-            'personel_no',
+            'id',
             'ilkad',
             'soyad',
             'unvan',

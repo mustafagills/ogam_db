@@ -26,7 +26,9 @@ def search_results(request):
     if search_option == "proje_calisanlar_no":
         queryset_list = queryset_list.filter(proje_calisanlar_no=parameter) or []
         return render(request, 'homepage.html', {'projes': queryset_list})
-
+    if search_option == "proje_teknik_yonetici_no":
+        queryset_list = queryset_list.filter(proje_teknik_yonetici_no=parameter) or []
+        return render(request, 'homepage.html', {'projes': queryset_list})
 @login_required
 def project_detail(request, pk):
     proje = get_object_or_404(Proje, pk=pk)
