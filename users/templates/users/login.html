@@ -1,12 +1,34 @@
 {% extends 'base_layout.html' %}
 {% block content %}
- <h1>Login</h1>
- <form class="site-form" action="{% url 'users:login' %}" method="post">
-  {% csrf_token %}
-  {{ form }}
-  <button type="submit" class="btn btn-danger">Login</button>
- </form>
-  <br><h3>or...</h3>
-
-  <a class="btn btn-danger" href="{%url 'users:signup' %}">Go to Signup Page</a>
+    <div class="container">
+        <form action="{% url 'users:login' %}" method="post">
+            {% csrf_token %}
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Giriş</div>
+                    <div class="panel-body">
+                        {% if error_message %}
+                            <p class="bg-danger p-d ml-b">{{ error_message }}</p>
+                        {% endif %}
+                        <div class="form-group clearfix">
+                            <label for="email" class="col-md-4 control-label text-right">Email:</label>
+                            <div class="col-md-6">
+                                <input name="email" type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="password" class="col-md-4 control-label text-right">Parola:</label>
+                            <div class="col-md-6">
+                                <input name="password" type="password" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-md-offset-4">
+                            <input name="login" type="submit" value="Giriş Yap" class="btn btn-success" /> &nbsp;
+                            <a href="{% url 'users:signup'%}">Kayıt ol</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 {% endblock %}

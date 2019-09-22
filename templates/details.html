@@ -1,0 +1,63 @@
+{% extends 'base_layout.html'%}
+{% block content %}
+
+<div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-default">
+        <div class="panel-heading">{{proje.proje_kod}} kodlu proje detayları</div>
+        <div class="panel-body">
+            {% if error_message %}
+                <p class="bg-danger p-d ml-b">{{ error_message }}</p>
+            {% endif %}
+            <div class="form-group clearfix">
+                <label class="col-md-2 control-label text-right">Proje Kodu<span class="text-red"></span>:</label>
+                <div class="col-md-6">
+                    {{ proje.proje_kod }}
+                </div>
+            </div>
+            <div class="form-group clearfix">
+                <label class="col-md-2 control-label text-right">Proje Adı<span class="text-red"></span>:</label>
+                <div class="col-md-6">
+                    {{ proje.proje_adi }}
+                </div>
+            </div>
+            <div class="form-group clearfix">
+                <label class="col-md-2 control-label text-right">Başlama Tarihi<span class="text-red"></span>:</label>
+                <div class="col-md-6">
+                    {{ proje.baslama_tarihi }}
+                </div>
+            </div>
+            <div class="form-group clearfix">
+                <label class="col-md-2 control-label text-right">Bitiş Tarihi<span class="text-red"></span>:</label>
+                <div class="col-md-6">
+                    {{ proje.bitis_tarihi }}
+                </div>
+            </div>
+            <div class="form-group clearfix">
+                <label class="col-md-2 control-label text-right">Proje Yöneticisi<span class="text-red"></span>:</label>
+                <div class="col-md-6">
+                    {{ proje.proje_yoneticisi }}
+                </div>
+            </div>
+            <div class="form-group clearfix">
+                <label class="col-md-2 control-label text-right">Proje Teknik Yöneticisi<span class="text-red"></span>:</label>
+                <div class="col-md-6">
+                    {{ proje.proje_teknik_yonetici_no }}
+                </div>
+            </div>
+            <div class="form-group clearfix">
+                <label class="col-md-2 control-label text-right">Proje Çalışanları<span class="text-red"></span>:</label>
+                <div class="col-md-6">
+                    {{ proje.proje_calisanlar_no}}
+                </div>
+            </div>
+            <div class="form-group clearfix">
+                <label class="col-md-2 control-label text-right">Proje Açıklaması<span class="text-red"></span>:</label>
+                <div class="col-md-6">
+                    {{ proje.aciklama }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

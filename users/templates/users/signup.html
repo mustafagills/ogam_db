@@ -1,9 +1,83 @@
-{% extends 'base_layout.html' %}
+{% extends "base_layout.html" %}
+
 {% block content %}
- <h1>Signup</h1>
- <form class="site-form" action="{% url 'users:signup' %}" method="post">
-  {% csrf_token %}
-  {{ form }}
-  <button type="submit" class="btn btn-danger">Kayıt ol</button>
- </form>
+    <div class="container">
+        <form action="{% url 'users:signup' %}" method="post">
+            {% csrf_token %}
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Kayıt ol</div>
+                    <div class="panel-body">
+                        {% if error_message %}
+                            <p class="bg-danger p-d ml-b">{{ error_message }}</p>
+                        {% endif %}
+                        <div class="form-group clearfix">
+                            <label for="{{ form.personel_no.id_for_label }}" class="col-md-4 control-label text-right">Personel No<span class="text-red"></span>:</label>
+                            <div class="col-md-6">
+                                {{ form.personel_no }}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.ilkad.id_for_label }}" class="col-md-4 control-label text-right">İlk ad:</label>
+                            <div class="col-md-6">
+                                {{ form.ilkad }}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.soyad.id_for_label }}" class="col-md-4 control-label text-right">Soyad:</label>
+                            <div class="col-md-6">
+                                {{ form.soyad }}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.unvan.id_for_label }}" class="col-md-4 control-label text-right">Ünvan:</label>
+                            <div class="col-md-6">
+                                {{ form.unvan }}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.email.id_for_label }}" class="col-md-4 control-label text-right">E-mail<span class="text-red"></span>:</label>
+                            <div class="col-md-6">
+                                {{ form.email }}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.yetki_kod.id_for_label }}" class="col-md-4 control-label text-right">Yetki Kod<span class="text-red"></span>:</label>
+                            <div class="col-md-6">
+                                {{ form.yetki_kod }}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.kullanici_tipi_no.id_for_label }}" class="col-md-4 control-label text-right">Kullanıcı Tipi No<span class="text-red"></span>:</label>
+                            <div class="col-md-6">
+                                {{ form.kullanici_tipi_no }}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.kullanici_kod.id_for_label }}" class="col-md-4 control-label text-right">Kullanıcı Kod<span class="text-red"></span>:</label>
+                            <div class="col-md-6">
+                                {{ form.kullanici_kod }}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.password1.id_for_label }}" class="col-md-4 control-label text-right">Parola<span class="text-red"></span>:</label>
+                            <div class="col-md-6">
+                                {{ form.password1 }}
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="{{ form.password2.id_for_label }}" class="col-md-4 control-label text-right">Parola Tekrar:</label>
+                            <div class="col-md-6">
+                                {{ form.password2 }}
+                            </div>
+                        </div>
+                        <div class="alert alert-warning" role="alert">Uyarı! Hesabınız admin tarafından aktifleştirildikten sonra açılacaktır.</div>
+                        <div class="col-md-6 col-md-offset-4">
+                            <input type="submit" value="Register" class="btn btn-success">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 {% endblock %}

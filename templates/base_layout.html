@@ -1,33 +1,59 @@
-{% load static from staticfiles %}
-<!DOCTYPE html>
-<html lang="tr" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Project Database</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  </head>
-  <body>
-    <header>
-    <a href="{% url 'homepage' %}"><img src="{% static '5.4_4(3).png' %}"/></a>
-      <nav>
-        <ul>
-          <li><a href="/admin/">Admin Panel</a></li>
-          {% if user.is_authenticated %}
-          <li>
-            <p>{{user.username}}</p>
-            <form class="site-form" action="{% url 'users:logout' %}" method="post">
-              {% csrf_token %}
-              <button type="submit" name="button">Çıkış yap</button>
-            </form>
-          </li>
-          {% endif %}
-        </ul>
-      </nav>
-    </header>
-    <div class="wrapper">
-      {% block content %}
-      {% endblock %}
-    </div>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <title>METU</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    </head>
+    <body class="override">
+        <nav class="navbar navbar-inverse" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">METU</a>
+                </div>
+
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if user.is_authenticated %}
+                        <li><h5 style="color:white; position:middle;">Hoşgeldiniz, {{user.ilkad}} {{user.soyad}}&nbsp</h5></li>
+                        <li><form class="site-form" action="{% url 'users:logout' %}" method="post">
+                          {% csrf_token %}
+                          <button type="submit" name="button">Çıkış Yap</button>
+                        </form></li>
+                        {% else %}
+                          <li><a href="{%url 'users:signup'%}">Kayıt Ol</a></li>
+                          <li><a href="{%url 'users:login'%}">Giriş Yap</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="row">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </body>
+    <footer style="bottom: 0;">
+        <div class="container">
+            <div class="row well ml-t">
+                <div class="col-lg-8 col-md-8">
+                    <h5>Developed by: Mustafa Gilli</h5>
+                    <h6>Middle East Technical University</h6>
+                    <h6>Computer Engineering #2</h6>
+                    <h6>2019 &copy</h6>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </html>
