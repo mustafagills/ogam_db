@@ -1,49 +1,88 @@
 {% extends 'base_layout.html'%}
 {% block content %}
-  <h2>Anasayfa</h2>
-  <form action="{% url 'search_results' %}">
+<div class="box">
+  <form class="form-inline" action="{% url 'search_results' %}">
     <select name="search_option">
       <option value="proje_kod">Proje Kodu</option>
       <option value="proje_adi">Proje Adı</option>
       <option value="proje_yoneticisi">Proje Yöneticisi</option>
       <option value="proje_teknik_yonetici_no">Proje Teknik Yönetici</option>
       <option value="proje_calisanlar_no">Proje Çalışanları</option>
+      <option value="proje_durumu">Proje Durumu</option>
+      <option value="proje_status">Proje Status</option>
+      <option value="proje_tipi">Proje Tipi</option>
     </select>
-    <input type="text" name = 'parameter' placeholder="Projeyi ara..." value="{{request.get.parameter}}">
-    <input type="submit" value="Projeyi getir">
+    <input class="form-control mr-sm-2" type="text" name = 'parameter' placeholder="Projeyi ara..." value="{{request.get.parameter}}">
+    <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Projeyi getir">
   </form>
-  <div class="projes">
-        <div class="proje">
-          {% if projes %}
-          <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Proje Kod</th>
-        <th scope="col">Proje Adı</th>
-        <th scope="col">Başlama Tarihi</th>
-        <th scope="col">Bitiş Tarihi</th>
-        <th scope="col">Yönetici</th>
-        <th scope="col">Teknik Yönetici</th>
-      </tr>
-    </thead>
+</div>&nbsp
+  <h3>Aktif Projeler</h3><hr>
+  {% if projes %}
+      <div class="projes">
+          <div class="proje">
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th scope="col">Proje Kod</th>
+                          <th scope="col">Proje Adı</th>
+                          <th scope="col">Başlama Tarihi</th>
+                          <th scope="col">Bitiş Tarihi</th>
+                          <th scope="col">Yönetici</th>
+                          <th scope="col">Teknik Yönetici</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for proje in projes %}
+                      <tr>
+                          <td scope="row">{{proje.proje_kod}}</td>
+                          <td scope="row">{{proje.proje_adi}}</td>
+                          <td scope="row">{{proje.baslama_tarihi}}</td>
+                          <td scope="row">{{proje.bitis_tarihi}}</td>
+                          <td scope="row">{{proje.proje_yoneticisi}}</td>
+                          <td scope="row">{{proje.proje_teknik_yonetici_no}}</td>
+                          <td><a href="{% url 'details' pk=proje.proje_kod %}" class="btn btn-info">Detaylar</a></td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  {% else %}
+      <h3>Mevcut proje yok.</h3>
+  {% endif %}&nbsp
+  <h3>Arşivlenmiş Projeler</h3><hr>
+  {% if archives %}
+      <div class="archives">
+          <div class="archive">
+              <table class="table">
+                  <thead>
+                      <tr>
+                          <th scope="col">Proje Kod</th>
+                          <th scope="col">Proje Adı</th>
+                          <th scope="col">Başlama Tarihi</th>
+                          <th scope="col">Bitiş Tarihi</th>
+                          <th scope="col">Yönetici</th>
+                          <th scope="col">Teknik Yönetici</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {% for archive in archives %}
+                      <tr>
+                          <td scope="row">{{archive.proje_kod}}</td>
+                          <td scope="row">{{archive.proje_adi}}</td>
+                          <td scope="row">{{archive.baslama_tarihi}}</td>
+                          <td scope="row">{{archive.bitis_tarihi}}</td>
+                          <td scope="row">{{archive.proje_yoneticisi}}</td>
+                          <td scope="row">{{archive.proje_teknik_yonetici_no}}</td>
+                          <td><a href="{% url 'details' pk=archive.proje_kod %}" class="btn btn-info">Detaylar</a></td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  {% else %}
+      <h3>Arşivlenmiş mevcut proje yok.</h3>
+  {% endif %}
 
-
-    <tbody>
-      {% for proje in projes %}
-      <tr>
-          <td scope="row">{{proje.id}}</td>
-          <td scope="row">{{proje.proje_kod}}</td>
-          <td scope="row">{{proje.proje_adi}}</td>
-          <td scope="row">{{proje.baslama_tarihi}}</td>
-          <td scope="row">{{proje.bitis_tarihi}}</td>
-          <td scope="row">{{proje.proje_yoneticisi}}</td>
-          <td scope="row">{{proje.proje_teknik_yonetici_no}}</td>
-          <td><a href="{% url 'details' pk=proje.pk %}" class="btn btn-info">Detaylar</a></td>
-      </tr>
-      {% endfor %}
-    </tbody>
-          {% else %}
-            <h3>Mevcut proje yok.</h3>
-          {% endif %}
 {% endblock %}

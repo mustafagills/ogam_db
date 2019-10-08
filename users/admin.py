@@ -11,10 +11,36 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ['ilkad','soyad','id','admin']
     list_filter = ['kullanici_tipi_no']
     fieldsets = (
-        (None, {'fields': ('id','email', 'password')}),
-        ('Kişisel Bilgiler', {'fields': ('ilkad', 'soyad')}),
-        ('Kurumsal Bilgiler', {'fields': ('unvan','yetki_kod','baslama_tarih','bitis_tarih','kullanici_kod', 'kullanici_tipi_no')}),
-        ('İzinler', {'fields': ('active','admin','staff')}),
+        (None, {
+            'fields': (
+                'id',
+                'email',
+                'password'
+            )
+        }),
+        ('Kişisel Bilgiler', {
+            'fields': (
+                'ilkad',
+                'soyad'
+            )
+        }),
+        ('Kurumsal Bilgiler', {
+            'fields': (
+                'unvan',
+                'yetki_kod',
+                'baslama_tarih',
+                'bitis_tarih',
+                'kullanici_kod',
+                'kullanici_tipi_no'
+            )
+        }),
+        ('İzinler', {
+            'fields': (
+                'active',
+                'admin',
+                'staff'
+            )
+        }),
     )
     ordering = ['ilkad',]
 

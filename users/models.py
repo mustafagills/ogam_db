@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 class UserManager(BaseUserManager):
     def create_user(self, email, ilkad, soyad, yetki_kod, kullanici_tipi_no, kullanici_kod,id, active = True, password = None):
         if not email or not ilkad or not soyad or not kullanici_tipi_no or not kullanici_kod or not yetki_kod:
-            raise ValueError("E-mail, ilkad, soyad, yetki kodu, kullanıcı tipi no, kullanıcı kod, personel no alanları boş kalamaz.")
+            raise ValueError("E-mail, ilkad, soyad, yetki kodu, kullanıcı tipi no, kullanıcı kod, id alanları boş kalamaz.")
         user_obj = self.model(
             email = self.normalize_email(email)
         )
@@ -14,7 +14,6 @@ class UserManager(BaseUserManager):
         user_obj.ilkad, user_obj.soyad = ilkad, soyad
         user_obj.active = active
         user_obj.yetki_kod = yetki_kod
-        user_obj.baslama_tarih = timezone.now
         user_obj.kullanici_tipi_no = kullanici_tipi_no
         user_obj.kullanici_kod = kullanici_kod
         user_obj.id = id
@@ -30,7 +29,6 @@ class UserManager(BaseUserManager):
             ilkad = ilkad,
             soyad = soyad,
             yetki_kod = yetki_kod,
-            baslama_tarih = timezone.now,
             active = active,
             kullanici_tipi_no = kullanici_tipi_no,
             kullanici_kod = kullanici_kod,
@@ -47,7 +45,6 @@ class UserManager(BaseUserManager):
             ilkad = ilkad,
             soyad = soyad,
             yetki_kod = yetki_kod,
-            baslama_tarih = timezone.now,
             active = active,
             kullanici_tipi_no = kullanici_tipi_no,
             kullanici_kod = kullanici_kod,
@@ -87,15 +84,13 @@ class User4Personels(AbstractBaseUser):
     objects = UserManager()
 
     def get_full_name(self):
-        # The user is identified by their email address
         return self.ilkad + self.soyad
 
     def get_short_name(self):
-        # The user is identified by their email address
         return self.ilkad
 
     def __str__(self):
-        return self.email
+        return str(self.id)
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
@@ -109,18 +104,19 @@ class User4Personels(AbstractBaseUser):
 
     @property
     def is_staff(self):
-        "Is the user a member of staff?"
         return self.staff
 
     @property
     def is_admin(self):
-        "Is the user a admin member?"
         return self.admin
 
     @property
     def is_active(self):
-        "Is the user active?"
         return self.active
+
+    class Meta:
+        verbose_name = 'Personel'
+        verbose_name_plural = 'Personeller'
 
 """class AnotherUser(models.Model):
     user = models.OneToOneField(User4Personels)
@@ -150,8 +146,27 @@ class User4Personels(AbstractBaseUser):
     def __str__(self):
         return self.ilkad + self.soyad """
 
-"""
-create table personel(
+'''create table proje_tip
+  (
+    proje_tip integer not null ,
+    aciklama char(50),
+    primary key (proje_tip)  constraint prj_tip_pk
+  )
+
+create table proje_status
+  (
+    proje_status_kod integer not null,
+    aciklama char(20),
+    primary key (proje_status_kod)  constraint prj_status_kod_pk
+  )
+create table proje_durum
+  (
+    proje_durum integer,
+    aciklama  char(30),
+    primary key (proje_durum) constraint prj_dur_pk
+  )
+create table personel
+  (
     personel_no integer not null ,
     ilkad char(20) not null,
     soyad char(20) not null,
@@ -164,5 +179,39 @@ create table personel(
     e_mail char(50),
     kullanici_kod char(11)not null ,
     primary key (personel_no)  constraint personel_pk
-    )
-  """
+  )
+
+create table personel_yetkilendirme
+  (
+    personel_no integer not null ,
+    proje_kod integer not null ,
+    yetki_kod integer not null ,
+    baslanma_tarih date not null ,
+    bitis_tarih date not null ,
+    primary key (personel_no,proje_kod,yetki_kod)  constraint yetki_pk
+  )
+create table proje
+  (
+    proje_kod integer not null,
+    proje_adi char(50) not null ,
+    baslama_tarihi date,
+    bitis_tarihi date,
+    proje_tip integer not null,
+    proje_durum integer,
+    proje_status_kod integer
+    kullanici_kod char(11),
+    personel_no integer not null,
+    yetki_kod integer not null,
+    kullanici_no integer not null,
+    aciklama  char(100),
+    primary key (proje_kod)  constraint proje_pk
+  )
+
+
+create table proje_arsiv
+  (
+    proje_kod integer not null ,
+    aciklama char(100),
+    aciklama_date date
+    )'''
+# Create your models here.

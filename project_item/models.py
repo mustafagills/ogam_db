@@ -2,65 +2,89 @@ from django.db import models
 from django.utils import timezone
 
 class proje_tip(models.Model):
-    proje_tip = models.IntegerField()
+    proje_tip = models.IntegerField(primary_key=True)
     aciklama = models.CharField(max_length= 50)
-    id = models.AutoField(primary_key = True)
 
-class proje_status(models.Model):
-    proje_status_kod = models.IntegerField()
-    aciklama = models.CharField(max_length = 20)
-    id = models.AutoField(primary_key = True)
-
-class proje_durum(models.Model):
-    proje_durum = models.IntegerField()
-    aciklama = models.CharField(max_length = 30)
-    id = models.AutoField(primary_key = True)
-
-class proje_arsiv:
-    proje_kod = models.IntegerField()
-    aciklama = models.CharField(max_length = 100)
-    aciklama_date = models.DateTimeField()
-
-class personel_yetkilendirme(models.Model):
-    personel_no = models.IntegerField()
-    proje_kod = models.IntegerField()
-    yetki_kod = models.IntegerField()
-    baslanma_tarih = models.DateTimeField()
-    bitis_tarih = models.DateTimeField()
-    id = models.AutoField(primary_key = True)
-
-class Proje(models.Model): ## TODO: tekrar bak
-    proje_kod = models.IntegerField()
-    proje_adi = models.CharField(max_length = 140, verbose_name = 'proje adı')
-    baslama_tarihi = models.DateTimeField()
-    bitis_tarihi = models.DateTimeField()
-    proje_yoneticisi = models.IntegerField()
-    proje_teknik_yonetici_no = models.IntegerField()
-    proje_calisanlar_no = models.TextField(default=False)
-    aciklama = models.CharField(max_length = 100)
-    """proje_durumu = models.ForeignKey(proje_durum, on_delete = models.CASCADE)
-    proje_status = models.ForeignKey(proje_status, on_delete = models.CASCADE)
-    proje_tip = models.ForeignKey(proje_tip, on_delete = models.CASCADE)"""
+    class Meta:
+        verbose_name = 'Proje Tipi'
+        verbose_name_plural = 'Proje Tipleri'
 
     def __str__(self):
-        return self.proje_adi
+        return str(self.proje_tip)
+class proje_status(models.Model):
+    proje_status_kod = models.IntegerField(primary_key=True)
+    aciklama = models.CharField(max_length = 20)
 
+    class Meta:
+        verbose_name = 'Proje Status'
+        verbose_name_plural = 'Proje Statusleri'
 
-# class Personel(models.Model):
-#     active = models.BooleanField(default=False)
-#     personel_pk = models.AutoField(primary_key = True)
-#     personel_no = models.IntegerField(unique = True)
-#     ilkad = models.CharField(max_length = 20)
-#     soyad = models.CharField(max_length = 20)
-#     baslama_tarih = models.DateTimeField()
-#     bitis_tarih = models.DateTimeField()
-#     yetki_kod = models.IntegerField()
-#     kullanici_tipi_no = models.IntegerField()
-#     e_mail = models.EmailField()
-#     kullanici_kod = models.CharField(max_length = 11)
+    def __str__(self):
+        return str(self.proje_status_kod)
+
+class proje_durum(models.Model):
+    proje_durum = models.IntegerField(primary_key=True)
+    aciklama = models.CharField(max_length = 30)
+
+    class Meta:
+        verbose_name = 'Proje Durum'
+        verbose_name_plural = 'Proje Durumları'
+
+    def __str__(self):
+        return str(self.proje_durum)
+
+# class proje_arsiv(models.Model):
+#     proje_kod = models.IntegerField()
+#     aciklama = models.CharField(max_length = 100, null=True, blank=True)
+#     aciklama_date = models.DateTimeField(default=timezone.now, null=True, blank=True)
+#
+#     class Meta:
+#         verbose_name = 'Proje Arşiv'
+#         verbose_name_plural = 'Proje Arşiv'
 #
 #     def __str__(self):
-#         return self.ilkad + self.soyad
+#         return str(self.proje_kod)
+
+class personel_yetkilendirme(models.Model):
+    personel_no = models.ForeignKey('users.User4Personels', on_delete=models.CASCADE, related_name= "+", verbose_name='Personel No',null=True)
+    proje_kod = models.ForeignKey('Proje', on_delete=models.CASCADE, related_name= "+", verbose_name='Proje Kod',null=True)
+    yetki_kod = models.IntegerField(unique=True)
+    baslanma_tarih = models.DateTimeField(null=True, blank=True)
+    bitis_tarih = models.DateTimeField(null=True, blank=True)
+    id = models.AutoField(primary_key = True)
+
+    class Meta:
+        verbose_name = 'Proje Yetkilendirme'
+        verbose_name_plural = 'Proje Yetkilendirme'
+
+    def __str__(self):
+        return str(self.yetki_kod)
+
+class Proje(models.Model):
+    choices=[
+                (1, 'Arşilendi'),
+                (0, 'Arşivlenmedi')
+            ]
+    proje_kod = models.IntegerField(primary_key=True, verbose_name='Proje Kodu') #proje kodu
+    proje_adi = models.CharField(max_length = 140, verbose_name = 'Proje Adı')
+    baslama_tarihi = models.DateTimeField(verbose_name='Başlama Tarihi')
+    bitis_tarihi = models.DateTimeField(verbose_name='Bitiş Tarihi',null=True, blank=True)
+    proje_yoneticisi = models.ForeignKey('users.User4Personels', on_delete=models.CASCADE, related_name= "+", verbose_name='Proje Yöneticisi',null=True, blank=True)
+    proje_teknik_yonetici_no = models.ForeignKey('users.User4Personels', on_delete=models.CASCADE, related_name= "+", verbose_name ='Proje Teknik Yönetici No',null=True, blank=True)
+    proje_calisanlar_no = models.TextField(null=True,blank=True, verbose_name='Proje Çalışanlarının Numaraları')
+    aciklama = models.CharField(max_length = 100, verbose_name='Açıklama', null=True, blank=True)
+    proje_durumu = models.ForeignKey('proje_durum', on_delete=models.CASCADE,related_name= "+",null=True, blank=True, verbose_name='Proje Durumu')
+    proje_status = models.ForeignKey('proje_status', on_delete=models.CASCADE,related_name= "+",null=True, blank=True, verbose_name='Proje Status')
+    proje_tip = models.ForeignKey('proje_tip', on_delete=models.CASCADE,related_name= "+",null=True, blank=True, verbose_name='Proje Tipi')
+    is_archive = models.IntegerField(choices=choices, default=0, verbose_name='Arşiv durumu')
+    aciklama_date = models.DateTimeField(null=True, blank=True, verbose_name='Açıklama Tarihi(Yalnızca arşivlerken ekleyin.)')
+
+    class Meta:
+        verbose_name = 'Proje'
+        verbose_name_plural = 'Projeler'
+
+    def __str__(self):
+        return str(self.proje_kod)
 
 '''create table proje_tip
   (

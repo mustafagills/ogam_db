@@ -21,5 +21,5 @@ urlpatterns = [
     path('', views.homepage, name = 'homepage'),
     path('users/', include('users.urls')),
     path('search_results/', views.search_results, name='search_results'),
-    path('details/<int:pk>', views.project_detail, name = 'details'),
+    path('details/<int:pk>', views.project_detail, name='details'),
 ]
