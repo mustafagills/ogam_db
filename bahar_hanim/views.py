@@ -96,7 +96,7 @@ def search_results(request):
         return render(request, 'homepage.html', context)
     if search_option == "proje_adi":
         queryset_list_active = queryset_list.filter(proje_adi__icontains=parameter, is_archive=0) or []
-        queryset_list_archive = queryset_list.filter(proje_icontains=parameter, is_archive=1) or []
+        queryset_list_archive = queryset_list.filter(proje_adi__icontains=parameter, is_archive=1) or []
         context = {
             'projes': queryset_list_active,
             'archives': queryset_list_archive,
